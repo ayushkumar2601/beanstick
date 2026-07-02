@@ -1,4 +1,4 @@
-import { runQuery, getNeo4jDriver } from './neo4j';
+import { runQuery, getAuraDBDriver } from './auradb';
 
 export interface FraudInsights {
   riskScore: number;
@@ -7,7 +7,7 @@ export interface FraudInsights {
 
 export class FraudService {
   async evaluateFraudRisk(wallet: string): Promise<FraudInsights> {
-    if (!getNeo4jDriver()) {
+    if (!getAuraDBDriver()) {
       return { riskScore: 0, reasons: [] };
     }
 
@@ -42,6 +42,22 @@ export class FraudService {
       if (circular.length > 0) {
         riskScore += 30;
         reasons.push('Suspicious clustering detected (high density of shared counterparty trading)');
+      }
+
+      // 3. Suspicious LP Rings (Isolated networks)
+      const ringQuery = `
+        MATCH (lp:LiquidityProvider {wallet: $wallet})<-[:TRADED_WITH]-(u:User)
+        WITH lp, collect(u) as users
+        MATCH (other:LiquidityProvider)<-[:TRADED_WITH]-(u2:User)
+        WHERE u2 IN users AND other.wallet <> lp.wallet
+        WITH lp, other, count(u2) as overlap
+        WHERE overlap > 10
+        RETURN other.wallet as ringMember
+      `;
+      const rings = await runQuery(ringQuery, { wallet });
+      if (rings.length > 3) {
+        riskScore += 25;
+        reasons.push('Possible reputation manipulation (detected dense isolated LP ring)');
       }
       
     } catch (err) {

@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
-import { runQuery, getNeo4jDriver } from '@/lib/neo4j';
+import { runQuery, getAuraDBDriver } from '@/lib/auradb';
 
 export async function GET() {
-  if (!getNeo4jDriver()) {
+  if (!getAuraDBDriver()) {
     return NextResponse.json({
       highRiskEntities: [
         { wallet: '0xMockFraud1', riskScore: 85, reasons: ['Suspicious clustering detected'] }

@@ -3,7 +3,7 @@ import { BaseAgent, AgentConfig } from '../runtime/index';
 import { RfqGet, QuoteSign, OrderCommit } from '../../protocol/mcp/schemas';
 import { simulatePayment } from '../payment-verify/banksim';
 import type { PaymentWebhookPayload } from '../payment-verify/webhook';
-import { TrustService } from '../../services/trust-graph/trust.service';
+import { TrustService } from '../../services/trust-infrastructure/trust.service';
 
 interface FiatAgentConfig extends Omit<AgentConfig, 'role'> {
   supportedRails: string[];
@@ -111,8 +111,8 @@ export class FiatAgent extends BaseAgent {
     }
 
     const scored = await Promise.all(quotes.map(async (q) => {
-      // Calculate Neo4j Trust Score
-      const trustEval = await this.trustService.calculateTrustScore(q.lpAgent);
+      // Calculate AuraDB Trust Score
+      const trustEval = await this.trustService.calculateFinalLiquidityProviderScore(q.lpAgent);
       
       // Original logic: score = rate * (reputation / 100)
       // New logic: incorporate TrustScore directly

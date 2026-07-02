@@ -1,10 +1,10 @@
-import { getNeo4jDriver, runQuery } from './neo4j';
+import { getAuraDBDriver, runQuery } from './auradb';
 
 export class GraphService {
   async initializeSchema() {
-    const driver = getNeo4jDriver();
+    const driver = getAuraDBDriver();
     if (!driver) {
-      console.warn('[GraphService] Skipping schema init: Neo4j not configured.');
+      console.warn('[GraphService] Skipping schema init: AuraDB not configured.');
       return;
     }
 
@@ -52,7 +52,7 @@ export class GraphService {
     fiatAgentId: string;
     cryptoAgentId: string;
   }) {
-    if (!getNeo4jDriver()) return;
+    if (!getAuraDBDriver()) return;
 
     console.log(`[GraphService] Ingesting settlement ${data.settlementId} into graph...`);
 

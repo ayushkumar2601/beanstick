@@ -10,7 +10,7 @@ import { AXLMessage } from '../../protocol/axl/bridge';
 import { ZeroGStorage } from '../../zerog/storage/client';
 import { ethers } from 'ethers';
 import crypto from 'node:crypto';
-import { GraphService } from '../../services/trust-graph/graph.service';
+import { SyncService } from '../../services/trust-infrastructure/sync.service';
 
 export interface AttestationAgentConfig extends Omit<AgentConfig, 'role'> {
   escrowAddress: string;
@@ -81,7 +81,7 @@ export class AttestationAgent extends BaseAgent {
   private watcherPubkeys: string[];
   private amountToleranceBps: number;
   private timestampToleranceSec: number;
-  private graphService = new GraphService();
+  private syncService = new SyncService();
 
   constructor(config: AttestationAgentConfig) {
     super({ ...config, role: 'keeper' });
@@ -306,12 +306,11 @@ export class AttestationAgent extends BaseAgent {
       if (commitment) {
         // Find the buyer pubkey from the commitment if available, or just mock userWallet
         const buyerAgent = await this.getAXLPublicKey(); // Actually Attestation is watcher/keeper
-        this.graphService.ingestSettlementEvent({
+        this.syncService.syncSettlement({
           userWallet: 'user_wallet', // We don't have direct access here, but in full system this is populated
           lpWallet: commitment.receiverCommitment,
           settlementId: attestation.orderId,
           amount: parseFloat(commitment.expectedAmount),
-          status: 'COMPLETED',
           railType: 'unknown',
           fiatAgentId: buyerAgent,
           cryptoAgentId: commitment.receiverCommitment
@@ -329,12 +328,11 @@ export class AttestationAgent extends BaseAgent {
       // Neo4j Ingestion (Failed Settlement)
       const commitment = this.orderCommitments.get(attestation.orderId);
       if (commitment) {
-        this.graphService.ingestSettlementEvent({
+        this.syncService.syncFailure({
           userWallet: 'user_wallet',
           lpWallet: commitment.receiverCommitment,
           settlementId: attestation.orderId,
           amount: parseFloat(commitment.expectedAmount),
-          status: 'FAILED',
           railType: 'unknown',
           fiatAgentId: 'unknown',
           cryptoAgentId: commitment.receiverCommitment

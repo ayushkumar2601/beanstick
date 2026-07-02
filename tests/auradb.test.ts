@@ -1,10 +1,10 @@
-import { TrustService } from '../services/trust-graph/trust.service';
-import { ReputationService } from '../services/trust-graph/reputation.service';
-import { FraudService } from '../services/trust-graph/fraud.service';
+import { TrustService } from '../services/trust-infrastructure/trust.service';
+import { ReputationService } from '../services/trust-infrastructure/reputation.service';
+import { FraudService } from '../services/trust-infrastructure/fraud.service';
 
 // Mock the Neo4j driver connection to run tests locally without a DB
-jest.mock('../services/trust-graph/neo4j', () => ({
-  getNeo4jDriver: () => null,
+jest.mock('../services/trust-infrastructure/auradb', () => ({
+  getAuraDBDriver: () => null,
   runQuery: async () => [],
 }));
 
@@ -19,8 +19,8 @@ describe('Trust Graph Intelligence', () => {
     fraudService = new FraudService();
   });
 
-  it('calculates trust score safely when Neo4j is offline', async () => {
-    const evalResult = await trustService.calculateTrustScore('0xTestWallet');
+  it('calculates trust score safely when AuraDB is offline', async () => {
+    const evalResult = await trustService.calculateFinalLiquidityProviderScore('0xTestWallet');
     
     // When offline, it should gracefully degrade and return a default score of 100
     expect(evalResult.trustScore).toBe(100);

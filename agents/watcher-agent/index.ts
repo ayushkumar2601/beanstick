@@ -8,6 +8,7 @@ import { BaseAgent, AgentConfig } from '../runtime';
 import { AXLMessage } from '../../protocol/axl/bridge';
 import { ethers } from 'ethers';
 import crypto from 'node:crypto';
+import { SyncService } from '../../services/trust-infrastructure/sync.service';
 
 export interface WatcherAgentConfig extends Omit<AgentConfig, 'role'> {
   escrowAddress: string;
@@ -63,6 +64,7 @@ export class WatcherAgent extends BaseAgent {
   private attestorPubkeys: string[];
   private webhookSecret: string;
   private pollInterval: NodeJS.Timeout | null = null;
+  private syncService = new SyncService();
 
   constructor(config: WatcherAgentConfig) {
     super({ ...config, role: 'keeper' });
@@ -168,6 +170,11 @@ export class WatcherAgent extends BaseAgent {
     } else {
       observation.state = 'rejected';
       console.warn(`[${this.config.name}] Rejected observation ${observation.observationId}: invalid signature`);
+      this.syncService.syncRiskSignal({
+        orderId: data.orderId,
+        reason: 'invalid_webhook_signature',
+        severity: 'high'
+      }).catch(console.error);
     }
 
     return observation;

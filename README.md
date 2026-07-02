@@ -92,14 +92,31 @@ sequenceDiagram
 
 ---
 
-## 🕸️ Graph Intelligence (Neo4j)
+## 🕸️ AuraDB Trust Infrastructure
 
-Beanstick is powered by **Neo4j**, serving as the core infrastructure layer for trust and reputation. By continuously modeling the network of users, LPs, and settlements as a graph, the system establishes a decentralized web of trust without relying on a central authority.
+Beanstick is powered by **AuraDB**, serving as the production graph infrastructure layer for real-time trust-aware settlement decisions. By continuously modeling the network of users, LPs, and settlements as a graph, the system establishes a decentralized web of trust without relying on a central authority.
 
-**Why Neo4j?**
-- **Relationship Intelligence:** Detects complex fraud patterns like circular trading (A -> B -> C -> A) that relational databases miss.
-- **Trust Score Engine:** Generates real-time reputation scores based on settlement reliability, total volume, and network trust.
-- **Risk-Aware Quoting:** Fiat agents don't just pick the cheapest quote—they evaluate `(Price) + (Neo4j Trust Score)` to protect your funds.
+**Why AuraDB?**
+- **Graph Intelligence:** Neo4j's AuraDB allows Beanstick to evaluate multi-hop trust relationships (e.g. "Trusted by trusted participants") which is impossible in flat relational schemas.
+- **Fraud Detection:** Detects complex reputation manipulation like circular trading (A -> B -> C -> A) and dense isolated LP rings.
+- **Trust Propagation:** Generates real-time reputation scores based on settlement reliability, total volume, and network trust propagation.
+- **Risk-Aware Quoting:** Fiat agents don't just pick the cheapest quote—they evaluate `(Price) + (AuraDB Trust Score)` to securely route liquidity.
+
+```text
+User
+ ↓
+Sarvam AI
+ ↓
+Fiat Agent
+ ↓
+AuraDB Trust Layer
+ ↓
+Quote Selection
+ ↓
+Escrow
+ ↓
+Settlement
+```
 
 ---
 
@@ -184,8 +201,10 @@ beanstick/
 
 Beanstick is an official submission for the **0G APAC Hackathon (2026)**.
 
+> Beanstick uses AuraDB as its production graph infrastructure to power real-time trust-aware settlement decisions.
+
 *   **Target Track**: Track 3 (Agentic Economy & Autonomous Applications) with relevance to Verifiable Finance.
-*   **Graph Technology**: Uses **Neo4j** to model decentralized trust, preventing Sybil attacks and ensuring fraud detection.
+*   **Graph Technology**: Uses **AuraDB** to model decentralized trust, trust propagation, risk-aware liquidity routing, and fraud detection.
 *   **Live Demo**: [beanstick-ten-hazel.vercel.app](https://beanstick-ten-hazel.vercel.app)
 *   **On-Chain Activity**: View our deployed Escrow on the 0G Testnet: `0xeAD29cBfAb93ed51808D65954Dd1b3cDDaDA1348`.
 
