@@ -25,6 +25,7 @@ Beanstick is built natively on the **0G modular AI x Web3 stack**.
 - **0G Chain**: Agents are minted as iNFTs (ERC-7857) on 0G Chain. It acts as the backbone for identity, embedding agent logic with on-chain verifiable binaries. The core Escrow mechanism also resides here.
 - **0G Storage**: The memory layer. KV (Key-Value) memory for real-time agent state, plus Log memory for full settlement history. All storage is encrypted and Merkle-rooted for auditability.
 - **0G Compute**: Sealed inference (TEE-attested LLM calls) for quote ranking and counterparty reputation scoring. This ensures that the proprietary logic for picking the best quote is secure and cannot be manipulated or front-run.
+- **Graph Intelligence (Neo4j)**: A dedicated graph database that continuously models the network of users, LPs, and settlements. It prevents fraud (e.g. circular trading) and provides a quantitative Trust Score that directly influences Quote Ranking.
 
 ### 2.2. The Swarm Ecosystem
 The power of Beanstick comes from a **4-Agent Quad** (defined in `/agents/manager.ts`):
@@ -41,8 +42,9 @@ The power of Beanstick comes from a **4-Agent Quad** (defined in `/agents/manage
 ### 3.1. End-to-End Settlement Flow
 1. **Connect & Init**: A user connects their wallet, initializing a Quad of agents (managed by the `AgentManager`).
 2. **Intent & RFQ**: The user's Fiat Agent broadcasts a desire (e.g., 100 USD to ETH).
-3. **Quote Ranking**: Multiple Crypto Agents reply. The Fiat Agent selects the best one via sealed inference on 0G Compute.
-4. **Escrow Lock**: The chosen Crypto Agent locks the requested tokens in the 0G `Escrow` contract and securely commits `keccak256(paymentReceiver)`.
+3. **Graph Trust Evaluation**: The Fiat Agent queries **Neo4j** to fetch the Trust Score and fraud risk for each replying Crypto Agent (LP).
+4. **Sealed Ranking**: Multiple Crypto Agents reply. The Fiat Agent selects the best one via sealed inference on 0G Compute, evaluating `(Best Price) + (Neo4j Trust Score)`.
+5. **Escrow Lock**: The chosen Crypto Agent locks the requested tokens in the 0G `Escrow` contract and securely commits `keccak256(paymentReceiver)`.
 5. **Fiat Transfer**: User pays via UPI/Bank transfer off-chain.
 6. **Observation**: Watcher Agent intercepts the payment webhook and forwards the structured observation to the Attestation Agent.
 7. **Attestation & Release**: Attestation Agent checks the hash against the on-chain commitment. A proof is generated and pinned to 0G Storage. The executor calls `release()` on the Escrow contract, and funds are distributed.

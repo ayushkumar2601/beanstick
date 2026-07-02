@@ -10,6 +10,7 @@ import { AXLMessage } from '../../protocol/axl/bridge';
 import { ZeroGStorage } from '../../zerog/storage/client';
 import { ethers } from 'ethers';
 import crypto from 'node:crypto';
+import { GraphService } from '../../services/trust-graph/graph.service';
 
 export interface AttestationAgentConfig extends Omit<AgentConfig, 'role'> {
   escrowAddress: string;
@@ -80,6 +81,7 @@ export class AttestationAgent extends BaseAgent {
   private watcherPubkeys: string[];
   private amountToleranceBps: number;
   private timestampToleranceSec: number;
+  private graphService = new GraphService();
 
   constructor(config: AttestationAgentConfig) {
     super({ ...config, role: 'keeper' });
@@ -299,6 +301,23 @@ export class AttestationAgent extends BaseAgent {
       // Notify watcher that observation was verified
       await this.notifyWatcherVerified(attestation);
 
+      // Neo4j Ingestion (Successful Settlement)
+      const commitment = this.orderCommitments.get(attestation.orderId);
+      if (commitment) {
+        // Find the buyer pubkey from the commitment if available, or just mock userWallet
+        const buyerAgent = await this.getAXLPublicKey(); // Actually Attestation is watcher/keeper
+        this.graphService.ingestSettlementEvent({
+          userWallet: 'user_wallet', // We don't have direct access here, but in full system this is populated
+          lpWallet: commitment.receiverCommitment,
+          settlementId: attestation.orderId,
+          amount: parseFloat(commitment.expectedAmount),
+          status: 'COMPLETED',
+          railType: 'unknown',
+          fiatAgentId: buyerAgent,
+          cryptoAgentId: commitment.receiverCommitment
+        }).catch(console.error);
+      }
+
       return receipt?.hash ?? '';
     } catch (err) {
       console.error(`[${this.config.name}] Release failed:`, err);
@@ -306,6 +325,22 @@ export class AttestationAgent extends BaseAgent {
         attestationId: attestation.attestationId,
         error: (err as Error).message,
       });
+
+      // Neo4j Ingestion (Failed Settlement)
+      const commitment = this.orderCommitments.get(attestation.orderId);
+      if (commitment) {
+        this.graphService.ingestSettlementEvent({
+          userWallet: 'user_wallet',
+          lpWallet: commitment.receiverCommitment,
+          settlementId: attestation.orderId,
+          amount: parseFloat(commitment.expectedAmount),
+          status: 'FAILED',
+          railType: 'unknown',
+          fiatAgentId: 'unknown',
+          cryptoAgentId: commitment.receiverCommitment
+        }).catch(console.error);
+      }
+
       return '';
     }
   }

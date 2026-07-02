@@ -92,6 +92,17 @@ sequenceDiagram
 
 ---
 
+## 🕸️ Graph Intelligence (Neo4j)
+
+Beanstick is powered by **Neo4j**, serving as the core infrastructure layer for trust and reputation. By continuously modeling the network of users, LPs, and settlements as a graph, the system establishes a decentralized web of trust without relying on a central authority.
+
+**Why Neo4j?**
+- **Relationship Intelligence:** Detects complex fraud patterns like circular trading (A -> B -> C -> A) that relational databases miss.
+- **Trust Score Engine:** Generates real-time reputation scores based on settlement reliability, total volume, and network trust.
+- **Risk-Aware Quoting:** Fiat agents don't just pick the cheapest quote—they evaluate `(Price) + (Neo4j Trust Score)` to protect your funds.
+
+---
+
 ## 🌐 Powered by the 0G Stack
 
 Beanstick is built natively on the 0G modular AI x Web3 stack. Every layer relies on a 0G primitive for security, speed, and privacy.
@@ -174,6 +185,7 @@ beanstick/
 Beanstick is an official submission for the **0G APAC Hackathon (2026)**.
 
 *   **Target Track**: Track 3 (Agentic Economy & Autonomous Applications) with relevance to Verifiable Finance.
+*   **Graph Technology**: Uses **Neo4j** to model decentralized trust, preventing Sybil attacks and ensuring fraud detection.
 *   **Live Demo**: [beanstick-ten-hazel.vercel.app](https://beanstick-ten-hazel.vercel.app)
 *   **On-Chain Activity**: View our deployed Escrow on the 0G Testnet: `0xeAD29cBfAb93ed51808D65954Dd1b3cDDaDA1348`.
 

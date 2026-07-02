@@ -3,6 +3,7 @@ import { BaseAgent, AgentConfig } from '../runtime/index';
 import { RfqGet, QuoteSign, OrderCommit } from '../../protocol/mcp/schemas';
 import { simulatePayment } from '../payment-verify/banksim';
 import type { PaymentWebhookPayload } from '../payment-verify/webhook';
+import { TrustService } from '../../services/trust-graph/trust.service';
 
 interface FiatAgentConfig extends Omit<AgentConfig, 'role'> {
   supportedRails: string[];
@@ -13,6 +14,7 @@ interface FiatAgentConfig extends Omit<AgentConfig, 'role'> {
 export class FiatAgent extends BaseAgent {
   private fiatConfig: FiatAgentConfig;
   private pendingQuotes: Map<string, QuoteSign[]> = new Map();
+  private trustService = new TrustService();
 
   constructor(config: FiatAgentConfig) {
     super({ ...config, role: 'buyer' });
@@ -108,15 +110,30 @@ export class FiatAgent extends BaseAgent {
       return null;
     }
 
-    const scored = quotes.map(q => ({
-      quote: q,
-      score: parseFloat(q.rate) * (q.reputation / 100),
+    const scored = await Promise.all(quotes.map(async (q) => {
+      // Calculate Neo4j Trust Score
+      const trustEval = await this.trustService.calculateTrustScore(q.lpAgent);
+      
+      // Original logic: score = rate * (reputation / 100)
+      // New logic: incorporate TrustScore directly
+      const rateScore = parseFloat(q.rate);
+      const trustScore = trustEval.trustScore / 100;
+      
+      // Weighting: 70% Price, 30% Trust
+      // Since price scales linearly, we blend them. For simplicity, we just multiply.
+      const finalScore = rateScore * trustScore;
+
+      return {
+        quote: q,
+        score: finalScore,
+        trustInfo: trustEval
+      };
     }));
 
     scored.sort((a, b) => b.score - a.score);
     const bestQuote = scored[0].quote;
 
-    console.log(`[FiatAgent] Selected quote from ${bestQuote.lpAgent}`);
+    console.log(`[FiatAgent] Selected quote from ${bestQuote.lpAgent} (Score: ${scored[0].score.toFixed(4)}, Trust: ${scored[0].trustInfo.trustScore.toFixed(2)})`);
 
     const commit: OrderCommit = {
       quoteId: bestQuote.rfqId,

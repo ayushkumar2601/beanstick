@@ -94,7 +94,19 @@ export function Navigation() {
           </div>
 
           {/* Desktop CTA */}
-          <div className="hidden md:flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-8">
+            <Link 
+              href="/trust" 
+              className="text-sm font-medium text-emerald-400/80 hover:text-emerald-400 transition-colors flex items-center gap-1.5"
+            >
+              Graph Intelligence
+            </Link>
+            <Link 
+              href="/p2p" 
+              className="text-sm font-medium text-zinc-400 hover:text-white transition-colors"
+            >
+              P2P Network
+            </Link>
             <Button
               size="sm"
               onClick={openDemo}
