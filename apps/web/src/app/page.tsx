@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
-import { LogoIcon } from '@/components/LogoIcon';
+import { Navbar } from '@/components/Navbar';
 
 export default function Home() {
   return (
@@ -9,26 +9,7 @@ export default function Home() {
       <div className="relative h-screen flex flex-col overflow-hidden">
         
         {/* 1. Navbar */}
-        <nav className="absolute top-0 left-0 right-0 z-20 px-6 py-5">
-          <div className="flex items-center justify-between max-w-[88rem] mx-auto">
-            <div className="flex items-center gap-2">
-              <LogoIcon className="w-7 h-7 text-black" />
-              <span className="text-2xl font-medium tracking-tight text-black">Beanstick</span>
-            </div>
-            
-            <div className="hidden md:flex items-center gap-8">
-              <Link href="#" className="text-base text-gray-700 hover:text-black font-medium transition-colors duration-200">Network</Link>
-              <Link href="#" className="text-base text-gray-700 hover:text-black font-medium transition-colors duration-200">Ecosystem</Link>
-              <Link href="#" className="text-base text-gray-700 hover:text-black font-medium transition-colors duration-200">Rewards</Link>
-              <Link href="#" className="text-base text-gray-700 hover:text-black font-medium transition-colors duration-200">Help</Link>
-              <Link href="#" className="text-base text-gray-700 hover:text-black font-medium transition-colors duration-200">News</Link>
-            </div>
-            
-            <Link href="/p2p" className="bg-black text-white text-base font-medium px-7 py-2.5 rounded-full hover:bg-gray-800 transition-colors duration-200">
-              Open Wallet
-            </Link>
-          </div>
-        </nav>
+        <Navbar />
 
         {/* 2. Hero Section */}
         <section className="flex-1 px-6 pt-20 pb-6 flex items-end max-w-[88rem] mx-auto w-full">

@@ -178,14 +178,14 @@ function GridOverlay() {
       {[...Array(6)].map((_, i) => (
         <div
           key={`h-${i}`}
-          className="absolute h-px bg-white/40"
+          className="absolute h-px bg-black/5"
           style={{ top: `${16.66 * (i + 1)}%`, left: 0, right: 0 }}
         />
       ))}
       {[...Array(8)].map((_, i) => (
         <div
           key={`v-${i}`}
-          className="absolute w-px bg-white/40"
+          className="absolute w-px bg-black/5"
           style={{ left: `${12.5 * (i + 1)}%`, top: 0, bottom: 0 }}
         />
       ))}
@@ -290,7 +290,7 @@ function SwapForm({
       <div className="relative overflow-hidden">
         <FloatingParticles />
 
-        <div className="relative border border-foreground/10 bg-white shadow-sm border-black/5 backdrop-blur-sm">
+        <div className="relative bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-black/5 overflow-hidden">
           <div className="px-5 py-3 border-b border-foreground/10 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <span className="text-[10px] font-mono text-muted-foreground">01</span>
@@ -302,7 +302,7 @@ function SwapForm({
           <div className="p-5 space-y-4">
             <div className="space-y-1.5 relative z-30">
               <label className="text-[10px] font-mono text-muted-foreground tracking-widest uppercase">You Pay</label>
-              <div className="relative border border-foreground/10 bg-white shadow-sm focus-within:border-foreground/30 transition-colors">
+              <div className="relative bg-[#F9F9F9] rounded-2xl border border-black/5 focus-within:border-black/20 focus-within:bg-white transition-all shadow-sm">
                 <input
                   type="number"
                   value={intent.amount}
@@ -349,14 +349,14 @@ function SwapForm({
             </div>
 
             <div className="flex justify-center -my-1">
-              <div className="w-8 h-8 border border-foreground/10 flex items-center justify-center bg-white">
+              <div className="w-10 h-10 rounded-full border border-black/10 flex items-center justify-center bg-white shadow-sm hover:scale-105 transition-transform cursor-pointer">
                 <ArrowDownUp className="w-3 h-3 text-muted-foreground" />
               </div>
             </div>
 
             <div className="space-y-1.5 relative z-20">
               <label className="text-[10px] font-mono text-muted-foreground tracking-widest uppercase">You Receive</label>
-              <div className="relative border border-foreground/10 bg-white shadow-sm">
+              <div className="relative bg-[#F9F9F9] rounded-2xl border border-black/5 shadow-sm">
                 <div className="px-4 py-3 text-2xl font-display text-muted-foreground/50">
                   ≈ pending
                 </div>
@@ -402,7 +402,7 @@ function SwapForm({
               <label className="text-[10px] font-mono text-muted-foreground tracking-widest uppercase">Payment Rail</label>
               <button
                 onClick={() => setRailOpen(!railOpen)}
-                className="w-full flex items-center justify-between border border-foreground/10 bg-white shadow-sm px-4 py-2.5 hover:border-foreground/20 transition-colors"
+                className="w-full flex items-center justify-between border border-black/5 rounded-2xl bg-[#F9F9F9] shadow-sm px-5 py-4 hover:border-black/10 hover:bg-white transition-all"
               >
                 <div className="flex items-center gap-3">
                   <Radio className="w-3.5 h-3.5 text-emerald-400" />
@@ -443,7 +443,7 @@ function SwapForm({
             <motion.button
               onClick={onSubmit}
               disabled={disabled || !agentStatus || !intent.amount}
-              className="w-full relative overflow-hidden bg-foreground text-background font-mono text-xs tracking-wider uppercase py-3 disabled:opacity-30 disabled:cursor-not-allowed group"
+              className="w-full relative overflow-hidden bg-black text-white rounded-full font-medium text-base py-4 mt-4 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-black/90 transition-colors shadow-lg shadow-black/10"
               whileHover={{ scale: disabled ? 1 : 1.01 }}
               whileTap={{ scale: disabled ? 1 : 0.99 }}
             >
@@ -460,7 +460,7 @@ function SwapForm({
                   </>
                 )}
               </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 via-cyan-500 to-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              {/* Removed flashy multi-gradient for premium solid look */}
             </motion.button>
           </div>
         </div>
@@ -481,8 +481,8 @@ function QuoteCard({ quote, index, intent, onSelect, selected }: {
       onClick={onSelect}
       className={`w-full text-left border transition-all ${
         selected
-          ? 'border-emerald-500/50 bg-emerald-500/5'
-          : 'border-foreground/10 bg-white shadow-sm hover:border-foreground/20'
+          ? 'border-black bg-[#F9F9F9] shadow-md'
+          : 'border-black/5 bg-white shadow-sm hover:border-black/10'
       }`}
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
@@ -539,7 +539,7 @@ function OrderProgress({ state, intent, selectedQuote }: {
   const currentIdx = getCurrentStepIndex();
 
   return (
-    <div className="border border-foreground/10 bg-white shadow-sm backdrop-blur-sm">
+    <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-black/5 overflow-hidden">
       <div className="px-4 py-2.5 border-b border-foreground/10">
         <span className="text-[10px] font-mono text-muted-foreground tracking-widest uppercase flex items-center gap-2">
           <Activity className="w-2.5 h-2.5" />
@@ -595,7 +595,7 @@ function OrderProgress({ state, intent, selectedQuote }: {
 
 function AgentActivityLog({ events }: { events: AxlEvent[] }) {
   return (
-    <div className="border border-foreground/10 bg-white shadow-sm backdrop-blur-sm h-full">
+    <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-black/5 h-full overflow-hidden">
       <div className="px-4 py-2.5 border-b border-foreground/10">
         <span className="text-[10px] font-mono text-muted-foreground tracking-widest uppercase flex items-center gap-2">
           <Zap className="w-2.5 h-2.5" />
@@ -641,7 +641,7 @@ function TransactionLinks({ lockTx, releaseTx, evidenceHash }: {
   if (!lockTx && !releaseTx && !evidenceHash) return null;
 
   return (
-    <div className="border border-foreground/10 bg-white shadow-sm backdrop-blur-sm">
+    <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-black/5 overflow-hidden">
       <div className="px-4 py-2.5 border-b border-foreground/10">
         <span className="text-[10px] font-mono text-muted-foreground tracking-widest uppercase flex items-center gap-2">
           <ExternalLink className="w-2.5 h-2.5" />
@@ -716,7 +716,7 @@ function AgentCards({ agentStatus, currentPhase }: { agentStatus: AgentStatus | 
         return (
           <div
             key={agent.name}
-            className={`border bg-white shadow-sm backdrop-blur-sm p-3 ${agent.active ? 'border-foreground/20' : 'border-foreground/5'}`}
+            className={`border rounded-2xl shadow-sm bg-white p-4 ${agent.active ? 'border-emerald-500/30' : 'border-black/5'}`}
           >
             <div className="flex items-center gap-2 mb-2">
               <div className={`w-7 h-7 bg-gradient-to-br ${colorMap[agent.color]} flex items-center justify-center`}>
