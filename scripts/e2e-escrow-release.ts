@@ -3,15 +3,15 @@
 // Real end-to-end exercise of the §7 webhook → 0G pin → on-chain release path
 // against the live Section 8 Escrow on 0G Galileo.
 //
-//   1. LP (deployer) approves Escrow to pull aUSD.
-//   2. LP calls Escrow.lock(buyer=deployer, token=aUSD, amount=100, fiatAmt=10000,
+//   1. LP (deployer) approves Escrow to pull bUSD.
+//   2. LP calls Escrow.lock(buyer=deployer, token=bUSD, amount=100, fiatAmt=10000,
 //      "INR", "banksim", 600s, orderRefId="order-e2e-<ts>").
 //   3. Boot the Hono webhook receiver with skipPin=false, skipRelease=false.
 //   4. BankSim emitter fires a signed PSP webhook for that orderId.
 //   5. Receiver verifies HMAC → validates → pins to 0G Storage → calls
 //      Escrow.release(orderIdHash, evidenceHash) (deployer is keeper).
 //   6. Wait for `Released(orderIdHash, evidenceHash)` event; assert state +
-//      that buyer balance increased by 100 aUSD.
+//      that buyer balance increased by 100 bUSD.
 
 import 'dotenv/config';
 import { ethers } from 'ethers';
@@ -52,7 +52,7 @@ async function main() {
   const buyer = lp.address;
   const lpAddr = lp.address;
   // Wallet only has ~0.09 0G; bond is 1% of tokenAmount in native token, so
-  // keep tokenAmount small (1 aUSD → 0.01 0G bond + gas fits comfortably).
+  // keep tokenAmount small (1 bUSD → 0.01 0G bond + gas fits comfortably).
   const tokenAmount = ethers.parseUnits('1', 18);
   const fiatAmount = 10000n;
   const orderRefId = `order-e2e-${Date.now()}`;
@@ -70,13 +70,13 @@ async function main() {
 
   // 1. approve
   const beforeBuyer: bigint = await token.balanceOf(buyer);
-  console.log(`buyer balance before lock+release : ${ethers.formatUnits(beforeBuyer, 18)} aUSD`);
+  console.log(`buyer balance before lock+release : ${ethers.formatUnits(beforeBuyer, 18)} bUSD`);
   const opts = {
     gasPrice: 5_000_000_000n,
     maxPriorityFeePerGas: 2_000_000_000n,
     maxFeePerGas: 5_000_000_000n,
   };
-  console.log('1. approve(escrow, 1 aUSD)…');
+  console.log('1. approve(escrow, 1 bUSD)…');
   const a = await token.approve(ESCROW, tokenAmount, { gasPrice: 5_000_000_000n });
   await a.wait();
   console.log(`   tx=${a.hash}`);
@@ -167,11 +167,11 @@ async function main() {
   }
 
   const afterBuyer: bigint = await token.balanceOf(buyer);
-  console.log(`   buyer balance after release  = ${ethers.formatUnits(afterBuyer, 18)} aUSD`);
+  console.log(`   buyer balance after release  = ${ethers.formatUnits(afterBuyer, 18)} bUSD`);
   // Net effect: buyer received tokenAmount, but LP also paid them (same wallet),
   // so net delta is 0; we just check the contract no longer holds them.
   const escrowBal: bigint = await token.balanceOf(ESCROW);
-  console.log(`   escrow balance after release = ${ethers.formatUnits(escrowBal, 18)} aUSD`);
+  console.log(`   escrow balance after release = ${ethers.formatUnits(escrowBal, 18)} bUSD`);
   if (escrowBal !== 0n) throw new Error('escrow still holds tokens after release');
 
   (server as { close?: (cb?: () => void) => void }).close?.();

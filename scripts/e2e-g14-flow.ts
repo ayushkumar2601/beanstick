@@ -87,15 +87,15 @@ async function main() {
 
   // 1. Approve
   const beforeBuyer: bigint = await token.balanceOf(buyer);
-  console.log(`buyer balance before: ${ethers.formatUnits(beforeBuyer, 18)} aUSD`);
+  console.log(`buyer balance before: ${ethers.formatUnits(beforeBuyer, 18)} bUSD`);
 
-  console.log('1. approve(escrow, 1 aUSD)...');
+  console.log('1. approve(escrow, 1 bUSD)...');
   const approveTx = await token.approve(ESCROW, tokenAmount, { gasPrice: 5_000_000_000n });
   await approveTx.wait();
   console.log(`   tx=${approveTx.hash}\n`);
 
   // 2. Lock with commitments
-  console.log('2. lockWithCommitments(buyer, token, 1 aUSD, 100 INR, banksim, 600s, ..G.14 fields..)...');
+  console.log('2. lockWithCommitments(buyer, token, 1 bUSD, 100 INR, banksim, 600s, ..G.14 fields..)...');
   const lpBond = (tokenAmount * 100n) / 10000n; // 1%
 
   let lockTx;
@@ -210,10 +210,10 @@ async function main() {
   if (stateName !== 'RELEASED') throw new Error(`expected RELEASED, got ${stateName}`);
 
   const afterBuyer: bigint = await token.balanceOf(buyer);
-  console.log(`   buyer balance after = ${ethers.formatUnits(afterBuyer, 18)} aUSD`);
+  console.log(`   buyer balance after = ${ethers.formatUnits(afterBuyer, 18)} bUSD`);
 
   const escrowBal: bigint = await token.balanceOf(ESCROW);
-  console.log(`   escrow balance = ${ethers.formatUnits(escrowBal, 18)} aUSD`);
+  console.log(`   escrow balance = ${ethers.formatUnits(escrowBal, 18)} bUSD`);
 
   (server as { close?: (cb?: () => void) => void }).close?.();
 

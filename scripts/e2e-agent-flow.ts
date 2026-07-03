@@ -214,7 +214,7 @@ async function main() {
   console.log(`│ Order state: ${stateNames[Number(order.state)]}`);
 
   const escrowBal = await token.balanceOf(ESCROW);
-  console.log(`│ Escrow balance: ${ethers.formatUnits(escrowBal, 18)} aUSD`);
+  console.log(`│ Escrow balance: ${ethers.formatUnits(escrowBal, 18)} bUSD`);
   console.log('└──────────────────────────────────────────────────────────┘\n');
 
   // Cleanup

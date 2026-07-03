@@ -12,7 +12,7 @@
     <a href="https://github.com/ayushkumar2601/beanstick/blob/main/LICENSE">
       <img src="https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge&color=2563EB" alt="MIT License" />
     </a>
-    <a href="https://aegis-ten-hazel.vercel.app">
+    <a href="https://beanstick-ten-hazel.vercel.app">
       <img src="https://img.shields.io/badge/0G_Network-Powered-00D4AA.svg?style=for-the-badge&logo=Web3&logoColor=white" alt="Powered by 0G" />
     </a>
     <a href="#0g-apac-hackathon-2026">
@@ -206,7 +206,7 @@ Beanstick is an official submission for the **0G APAC Hackathon (2026)**.
 *   **Target Track**: Track 3 (Agentic Economy & Autonomous Applications) with relevance to Verifiable Finance.
 *   **Graph Technology**: Uses **AuraDB** to model decentralized trust, trust propagation, risk-aware liquidity routing, and fraud detection.
 *   **Live Demo**: [beanstick-ten-hazel.vercel.app](https://beanstick-ten-hazel.vercel.app)
-*   **On-Chain Activity**: View our deployed Escrow on the 0G Testnet: `0xeAD29cBfAb93ed51808D65954Dd1b3cDDaDA1348`.
+*   **On-Chain Activity**: View our deployed Escrow on Ethereum Sepolia: `0x04baE2732D5A26cd70d26E40a9196396E9a49aC0`.
 
 ---
 

@@ -1,4 +1,4 @@
-// Quick: lock 1 aUSD with orderRefId "order-kh-test-1" on Base Sepolia.
+// Quick: lock 1 bUSD with orderRefId "order-kh-test-1" on Base Sepolia.
 import 'dotenv/config';
 import { ethers } from 'ethers';
 
