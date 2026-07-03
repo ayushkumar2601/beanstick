@@ -984,9 +984,9 @@ export default function P2PPage() {
 
         const fiatDetails: FiatDetails = data.fiatDetails || {
           railType: intent.rail,
-          paymentId: 'arkoroy@okicici',
+          paymentId: 'ayushkumar@canara',
           reference: orderRefId,
-          qrPayload: `pay://arkoroy@okicici?amount=${intent.amount}&ref=${orderRefId}`,
+          qrPayload: `pay://ayushkumar@canara?amount=${intent.amount}&ref=${orderRefId}`,
         };
         setAppState(prev => ({ ...prev, fiatDetails }));
 

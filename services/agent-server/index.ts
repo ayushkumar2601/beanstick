@@ -382,9 +382,9 @@ app.post('/commit', async (c) => {
     const refId = orderRefId || `order-${Date.now()}`;
     const fiatDetails = {
       railType: selectedRail,
-      paymentId: 'arkoroy@okicici',
+      paymentId: 'ayushkumar@canara',
       reference: refId,
-      qrPayload: `pay://arkoroy@okicici?amount=${refId}&ref=${refId}`,
+      qrPayload: `pay://ayushkumar@canara?amount=${refId}&ref=${refId}`,
     };
 
     return c.json({ ok: true, quote, fiatDetails });
