@@ -290,7 +290,7 @@ function SwapForm({
       <div className="relative overflow-hidden">
         <FloatingParticles />
 
-        <div className="relative border border-foreground/10 bg-black/60 backdrop-blur-sm">
+        <div className="relative border border-foreground/10 bg-white shadow-sm border-black/5 backdrop-blur-sm">
           <div className="px-5 py-3 border-b border-foreground/10 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <span className="text-[10px] font-mono text-muted-foreground">01</span>
@@ -302,7 +302,7 @@ function SwapForm({
           <div className="p-5 space-y-4">
             <div className="space-y-1.5 relative z-30">
               <label className="text-[10px] font-mono text-muted-foreground tracking-widest uppercase">You Pay</label>
-              <div className="relative border border-foreground/10 bg-black/40 focus-within:border-foreground/30 transition-colors">
+              <div className="relative border border-foreground/10 bg-white shadow-sm focus-within:border-foreground/30 transition-colors">
                 <input
                   type="number"
                   value={intent.amount}
@@ -326,7 +326,7 @@ function SwapForm({
                         initial={{ opacity: 0, y: -8 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -8 }}
-                        className="absolute right-0 top-full mt-2 w-52 bg-black border border-foreground/20 shadow-2xl z-[100]"
+                        className="absolute right-0 top-full mt-2 w-52 bg-white border border-foreground/20 shadow-2xl z-[100]"
                       >
                         {FIAT_CURRENCIES.map((c) => (
                           <button
@@ -349,14 +349,14 @@ function SwapForm({
             </div>
 
             <div className="flex justify-center -my-1">
-              <div className="w-8 h-8 border border-foreground/10 flex items-center justify-center bg-black">
+              <div className="w-8 h-8 border border-foreground/10 flex items-center justify-center bg-white">
                 <ArrowDownUp className="w-3 h-3 text-muted-foreground" />
               </div>
             </div>
 
             <div className="space-y-1.5 relative z-20">
               <label className="text-[10px] font-mono text-muted-foreground tracking-widest uppercase">You Receive</label>
-              <div className="relative border border-foreground/10 bg-black/40">
+              <div className="relative border border-foreground/10 bg-white shadow-sm">
                 <div className="px-4 py-3 text-2xl font-display text-muted-foreground/50">
                   ≈ pending
                 </div>
@@ -376,7 +376,7 @@ function SwapForm({
                         initial={{ opacity: 0, y: -8 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -8 }}
-                        className="absolute right-0 top-full mt-2 w-52 bg-black border border-foreground/20 shadow-2xl z-[100]"
+                        className="absolute right-0 top-full mt-2 w-52 bg-white border border-foreground/20 shadow-2xl z-[100]"
                       >
                         {CRYPTO_CURRENCIES.map((c) => (
                           <button
@@ -402,7 +402,7 @@ function SwapForm({
               <label className="text-[10px] font-mono text-muted-foreground tracking-widest uppercase">Payment Rail</label>
               <button
                 onClick={() => setRailOpen(!railOpen)}
-                className="w-full flex items-center justify-between border border-foreground/10 bg-black/40 px-4 py-2.5 hover:border-foreground/20 transition-colors"
+                className="w-full flex items-center justify-between border border-foreground/10 bg-white shadow-sm px-4 py-2.5 hover:border-foreground/20 transition-colors"
               >
                 <div className="flex items-center gap-3">
                   <Radio className="w-3.5 h-3.5 text-emerald-400" />
@@ -420,7 +420,7 @@ function SwapForm({
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
-                    className="border border-foreground/10 bg-black overflow-hidden"
+                    className="border border-foreground/10 bg-white overflow-hidden"
                   >
                     {RAILS.map((r) => (
                       <button
@@ -482,7 +482,7 @@ function QuoteCard({ quote, index, intent, onSelect, selected }: {
       className={`w-full text-left border transition-all ${
         selected
           ? 'border-emerald-500/50 bg-emerald-500/5'
-          : 'border-foreground/10 bg-black/40 hover:border-foreground/20'
+          : 'border-foreground/10 bg-white shadow-sm hover:border-foreground/20'
       }`}
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
@@ -539,7 +539,7 @@ function OrderProgress({ state, intent, selectedQuote }: {
   const currentIdx = getCurrentStepIndex();
 
   return (
-    <div className="border border-foreground/10 bg-black/40 backdrop-blur-sm">
+    <div className="border border-foreground/10 bg-white shadow-sm backdrop-blur-sm">
       <div className="px-4 py-2.5 border-b border-foreground/10">
         <span className="text-[10px] font-mono text-muted-foreground tracking-widest uppercase flex items-center gap-2">
           <Activity className="w-2.5 h-2.5" />
@@ -558,7 +558,7 @@ function OrderProgress({ state, intent, selectedQuote }: {
               <div className={`w-6 h-6 border flex items-center justify-center transition-all ${
                 isActive ? 'border-emerald-500 bg-emerald-500/10' :
                 isComplete ? 'border-emerald-500/30 bg-emerald-500/5' :
-                'border-foreground/10 bg-black'
+                'border-foreground/10 bg-white'
               }`}>
                 {isActive ? (
                   <Loader2 className="w-2.5 h-2.5 text-emerald-400 animate-spin" />
@@ -595,7 +595,7 @@ function OrderProgress({ state, intent, selectedQuote }: {
 
 function AgentActivityLog({ events }: { events: AxlEvent[] }) {
   return (
-    <div className="border border-foreground/10 bg-black/40 backdrop-blur-sm h-full">
+    <div className="border border-foreground/10 bg-white shadow-sm backdrop-blur-sm h-full">
       <div className="px-4 py-2.5 border-b border-foreground/10">
         <span className="text-[10px] font-mono text-muted-foreground tracking-widest uppercase flex items-center gap-2">
           <Zap className="w-2.5 h-2.5" />
@@ -641,7 +641,7 @@ function TransactionLinks({ lockTx, releaseTx, evidenceHash }: {
   if (!lockTx && !releaseTx && !evidenceHash) return null;
 
   return (
-    <div className="border border-foreground/10 bg-black/40 backdrop-blur-sm">
+    <div className="border border-foreground/10 bg-white shadow-sm backdrop-blur-sm">
       <div className="px-4 py-2.5 border-b border-foreground/10">
         <span className="text-[10px] font-mono text-muted-foreground tracking-widest uppercase flex items-center gap-2">
           <ExternalLink className="w-2.5 h-2.5" />
@@ -716,7 +716,7 @@ function AgentCards({ agentStatus, currentPhase }: { agentStatus: AgentStatus | 
         return (
           <div
             key={agent.name}
-            className={`border bg-black/40 backdrop-blur-sm p-3 ${agent.active ? 'border-foreground/20' : 'border-foreground/5'}`}
+            className={`border bg-white shadow-sm backdrop-blur-sm p-3 ${agent.active ? 'border-foreground/20' : 'border-foreground/5'}`}
           >
             <div className="flex items-center gap-2 mb-2">
               <div className={`w-7 h-7 bg-gradient-to-br ${colorMap[agent.color]} flex items-center justify-center`}>
@@ -1166,7 +1166,7 @@ export default function P2PPage() {
                     key="locked"
                     initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="border border-foreground/10 bg-black/60 backdrop-blur-sm"
+                    className="border border-foreground/10 bg-white shadow-sm border-black/5 backdrop-blur-sm"
                   >
                     <div className="p-5 text-center border-b border-foreground/10">
                       <div className="w-14 h-14 mx-auto border border-emerald-500/30 bg-emerald-500/10 flex items-center justify-center mb-4">
@@ -1290,7 +1290,7 @@ export default function P2PPage() {
                     key="processing"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="border border-foreground/10 bg-black/60 backdrop-blur-sm p-8 text-center"
+                    className="border border-foreground/10 bg-white shadow-sm border-black/5 backdrop-blur-sm p-8 text-center"
                   >
                     <Loader2 className="w-8 h-8 text-emerald-400 animate-spin mx-auto mb-4" />
                     <p className="text-lg font-display">
