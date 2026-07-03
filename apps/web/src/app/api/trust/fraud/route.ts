@@ -27,7 +27,7 @@ export async function GET() {
     const highRiskEntities = results.map(r => ({
       wallet: r.wallet,
       riskScore: 70 + (r.failCount * 2), // Rough heuristic
-      reasons: [\`High rate of failed settlements (\${r.failCount} fails vs \${r.successCount} successes)\`]
+      reasons: [`High rate of failed settlements (${r.failCount} fails vs ${r.successCount} successes)`]
     }));
 
     return NextResponse.json({ highRiskEntities });

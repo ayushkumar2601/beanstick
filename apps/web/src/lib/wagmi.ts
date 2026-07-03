@@ -1,5 +1,5 @@
 import { http, createConfig } from 'wagmi';
-import { mainnet, baseSepolia } from 'wagmi/chains';
+import { sepolia, baseSepolia } from 'wagmi/chains';
 import { injected } from 'wagmi/connectors';
 
 // 0G Galileo testnet
@@ -17,12 +17,12 @@ const zerogGalileo = {
 } as const;
 
 export const config = createConfig({
-  chains: [zerogGalileo, baseSepolia, mainnet],
+  chains: [zerogGalileo, baseSepolia, sepolia],
   connectors: [injected()],
   transports: {
     [zerogGalileo.id]: http(),
     [baseSepolia.id]: http(),
-    [mainnet.id]: http(),
+    [sepolia.id]: http(),
   },
   ssr: true,
 });

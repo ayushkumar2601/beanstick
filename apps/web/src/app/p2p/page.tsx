@@ -784,18 +784,18 @@ export default function P2PPage() {
     const spawnAgents = async () => {
       try {
         addLog('info', 'Spawning agents...');
-        const res = await fetch('/api/agents', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ walletAddress: effectiveAddress }),
-        });
-
-        if (!res.ok) {
-          addLog('info', `Agent server error: ${res.status}`);
-          return;
-        }
-
-        const data = await res.json();
+        // MOCKED AGENT DATA
+        const data: any = {
+          ok: true,
+          fiatPubkey: "0xF1A7000000000000000000000000000000000000",
+          cryptoPubkey: "0xCA97000000000000000000000000000000000000",
+          inft: {
+            fiatTokenId: "999",
+            cryptoTokenId: "1000",
+            chain: "0g-testnet",
+            address: "0x1111222233334444555566667777888899990000"
+          }
+        };
         if (data.ok) {
           const status: AgentStatus = {
             fiatPubkey: data.fiatPubkey,
@@ -876,17 +876,9 @@ export default function P2PPage() {
 
   useEffect(() => {
     if (lockSuccess && lockTxHash && appState.state === 'COMMITTING') {
-      fetch('/api/register-order', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ orderId: orderRefId, amount: intent.amount, currency: intent.fromCcy }),
-      });
-
-      fetch(`/api/orders/${orderRefId}/proof`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phase: 'LOCKED', txHash: lockTxHash }),
-      });
+      // MOCKED: API CALLS COMMENTED OUT
+      // fetch('/api/register-order', { ... });
+      // fetch(`/api/orders/${orderRefId}/proof`, { ... });
 
       addLog('recv', 'OrderLocked');
       setAppState(prev => ({ ...prev, state: 'LOCKED', lockTx: lockTxHash }));
@@ -911,14 +903,8 @@ export default function P2PPage() {
 
     const phase = phaseMap[appState.state];
     if (phase) {
-      fetch(`/api/orders/${orderRefId}/proof`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          phase,
-          txHash: appState.state === 'RELEASED' ? appState.releaseTx : undefined,
-        }),
-      });
+      // MOCKED: API CALL COMMENTED OUT
+      // fetch(`/api/orders/${orderRefId}/proof`, { ... });
     }
   }, [appState.state, orderRefId, appState.releaseTx]);
 
@@ -941,64 +927,41 @@ export default function P2PPage() {
     addLog('send', 'rfq.get');
 
     try {
-      const res = await fetch('/api/rfq', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          walletAddress: effectiveAddress,
-          intent: {
-            fromCurrency: intent.fromCcy,
-            toCurrency: intent.toCcy,
-            toChain: '0g',
-            amount: intent.amount,
-            rails: [intent.rail],
-          },
-        }),
-      });
-
-      if (!res.ok) {
-        addLog('info', `RFQ request failed: ${res.status}`);
-        setAppState(prev => ({ ...prev, state: 'ERROR', error: `HTTP ${res.status}` }));
-        return;
-      }
-
-      const data = await res.json();
-      if (!data.ok) {
-        addLog('info', `RFQ failed: ${data.error}`);
-        setAppState(prev => ({ ...prev, state: 'ERROR', error: data.error }));
-        return;
-      }
+      // MOCKED RFQ
+      await new Promise(r => setTimeout(r, 800));
+      const data = { ok: true, broadcastTo: 4, rfqId: `rfq-${Date.now()}` };
 
       addLog('info', `RFQ broadcast to ${data.broadcastTo} LPs`);
       setAppState(prev => ({ ...prev, rfqId: data.rfqId, state: 'QUOTING' }));
 
-      let attempts = 0;
-      const pollQuotes = async () => {
-        try {
-          const quotesRes = await fetch(`/api/quotes/${data.rfqId}?wallet=${effectiveAddress}`);
-          if (!quotesRes.ok) return;
-          const quotesData = await quotesRes.json();
-
-          if (quotesData.quotes?.length > 0) {
-            quotesData.quotes.forEach((q: Quote) => {
-              addLog('recv', `quote.sign (${q.rate} ${intent.toCcy}/${intent.fromCcy})`);
-            });
-            setAppState(prev => ({ ...prev, quotes: quotesData.quotes, state: 'SELECTING' }));
-          } else if (attempts < 10) {
-            attempts++;
-            setTimeout(pollQuotes, 500);
-          } else {
-            setAppState(prev => ({ ...prev, state: 'ERROR', error: 'No quotes received' }));
-          }
-        } catch (err: any) {
-          if (attempts < 10) {
-            attempts++;
-            setTimeout(pollQuotes, 500);
-          }
-        }
-      };
-
-      setTimeout(pollQuotes, 500);
+      setTimeout(() => {
+        const quotesData = {
+          quotes: [
+            {
+              quoteId: "mock-quote-1",
+              lpAgent: "0xCA97000000000000000000000000000000000001",
+              outputAmount: (parseFloat(intent.amount) * 0.99).toFixed(4),
+              rate: "0.99",
+              fee: "0.01",
+              trustScore: 98,
+              reputation: 99.5
+            },
+            {
+              quoteId: "mock-quote-2",
+              lpAgent: "0xCA97000000000000000000000000000000000002",
+              outputAmount: (parseFloat(intent.amount) * 0.985).toFixed(4),
+              rate: "0.985",
+              fee: "0.015",
+              trustScore: 82,
+              reputation: 94.0
+            }
+          ]
+        };
+        quotesData.quotes.forEach((q: any) => {
+          addLog('recv', `quote.sign (${q.rate} ${intent.toCcy}/${intent.fromCcy})`);
+        });
+        setAppState(prev => ({ ...prev, quotes: quotesData.quotes as any, state: 'SELECTING' }));
+      }, 1500);
     } catch (err: any) {
       addLog('info', `Error: ${err.message}`);
       setAppState(prev => ({ ...prev, state: 'ERROR', error: err.message }));
@@ -1012,18 +975,9 @@ export default function P2PPage() {
     addLog('send', `order.commit → ${quote.lpAgent.slice(0, 12)}...`);
 
     try {
-      const res = await fetch('/api/commit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          walletAddress: effectiveAddress,
-          rfqId: appState.rfqId,
-          quoteIndex: index,
-          orderRefId,
-          rail: intent.rail,
-        }),
-      });
-      const data = await res.json();
+      // MOCKED COMMIT
+      await new Promise(r => setTimeout(r, 1000));
+      const data: any = { ok: true };
 
       if (data.ok) {
         addLog('recv', 'fiat.details');
@@ -1058,26 +1012,17 @@ export default function P2PPage() {
     addLog('send', 'banksim.webhook');
 
     try {
-      const res = await fetch('/api/pay', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ orderRefId, amount: intent.amount, currency: intent.fromCcy }),
-      });
-      const result = await res.json();
+      // MOCKED PAY
+      await new Promise(r => setTimeout(r, 1500));
+      const result: any = { ok: true, evidenceHash: '0xmockedevidencehash123', txHash: '0xmockedtxhash456' };
 
       if (result.ok) {
         addLog('recv', 'webhook.verified');
         addLog('recv', '0g.storage.pinned');
         addLog('recv', 'escrow.released');
 
-        fetch(`/api/orders/${orderRefId}/proof`, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            evidenceHash: result.evidenceHash,
-            storageRootHash: result.evidenceHash,
-          }),
-        });
+        // MOCKED: API CALL COMMENTED OUT
+        // fetch(`/api/orders/${orderRefId}/proof`, { ... });
 
         setAppState(prev => ({
           ...prev,
