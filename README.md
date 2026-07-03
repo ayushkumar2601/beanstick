@@ -1,23 +1,90 @@
 <div align="center">
-  <h1 align="center">Beanstick</h1>
-  <p align="center">
-    <strong>The autonomous fiat-to-crypto settlement network.</strong><br/>
-    No operators. No custodians. No centralized exchanges.
-  </p>
+  <img src="https://github.com/user-attachments/assets/c698b2cd-da84-4cb0-9276-125c6a7244aa" alt="hh26 main poster" width="100%" />
 </div>
 
----
+# 🚀 Beanstick
 
-## 🏆 HackHazards Hackathon
-
-**Beanstick** was proudly built by **Ayush Kumar** for the **HackHazards Hackathon**. 
-This project aims to revolutionize decentralized finance by creating a trustless, agentic fiat-crypto onramp powered by artificial intelligence, zero-knowledge proofs, and highly scalable databases.
+> The autonomous fiat-to-crypto settlement network. No operators. No custodians. No centralized exchanges.
 
 ---
 
-## 📸 Project Showcase
+## 📌 Problem & Domain
 
-Here is a look at the premium, fintech-grade interface built for Beanstick:
+Today, moving money between traditional banking and crypto is broken. It requires centralized custodians, invasive KYC, high fees, and days of waiting. 
+
+**Themes Selected (at least one):**
+- [ ] Human Experience & Productivity  
+- [ ] Climate & Sustainability Systems  
+- [ ] HealthTech & Bio Platforms  
+- [ ] Learning & Knowledge Systems  
+- [x] Work, Finance & Digital Economy  
+- [ ] Infrastructure, Mobility & Smart Systems  
+- [ ] Trust, Identity & Security  
+- [ ] Media, Social & Interactive Platforms  
+- [ ] Public Systems, Governance and Civic Tech  
+- [ ] Developer Tools & Software Infrastructure  
+
+---
+
+## 🎯 Objective
+
+Beanstick solves the broken fiat-to-crypto onramp by acting as a decentralized network of autonomous Liquidity Provider (LP) agents. 
+
+- **Target Users:** Crypto users seeking low-fee, trustless, and fast onboarding from fiat to crypto.
+- **Pain Point:** Centralized custodians, invasive KYC, high fees, and slow settlement times.
+- **Value:** A trustless, agentic fiat-crypto onramp powered by artificial intelligence, zero-knowledge proofs, and highly scalable databases, allowing users to trade with a decentralized network of agents competing to give the best rate.
+
+---
+
+## 🧠 Team & Approach
+
+### Team Name:  
+`Hell Code`
+
+### Team Members:  
+- Ayush Kumar (https://github.com/ayushkumar2601 / https://www.linkedin.com/in/ayush-kumar-9003b5321/ / Overall Software Development)
+
+### Your Approach:
+- **Why you chose this problem:** To revolutionize decentralized finance and eliminate counterparty risk from the fiat-to-crypto bridge.
+- **Key challenges addressed:** Bridging the Web2 banking system with Web3 smart contracts trustlessly using zkTLS, and routing complex liquidity graphs in real-time.
+- **Pivots/Breakthroughs:** Utilizing Neo4j AuraDB to instantly calculate trust scores and route liquidity, and using 0G Data Availability to achieve infinite scalability and low gas fees.
+
+---
+
+## 🛠️ Tech Stack
+
+### Core Technologies Used:
+- **Frontend:** React, Next.js, Tailwind CSS, Framer Motion
+- **Backend:** Node.js (Custom AI swarm architecture)
+- **Database:** Neo4j AuraDB
+- **APIs:** Web2 banking APIs (e.g., Plaid, Stripe via zkTLS)
+- **Hosting:** Vercel (Frontend), Sepolia Testnet, 0G Network
+
+### Additional Technologies Used (Optional):
+- [x] AI / ML  
+- [x] Web3 / Blockchain  
+- [ ] Cyber Security 
+- [ ] Cloud  
+
+---
+
+## 🏆 Sponsored Track (Optional)
+
+- [ ] **Expo Track** – Built using Expo  
+- [x] **Neo4j Track** – Uses AuraDB as primary database  
+- [ ] **Base44 Track** – Prototype/Final Product built using Base44  
+
+**How we used the partner technology:**
+> A critical component of Beanstick's architecture is its ability to map, analyze, and route complex liquidity graphs in real-time. We use Neo4j AuraDB for Agent Reputation Graph modeling (calculating trust scores), Liquidity Routing (executing PageRank and Betweenness Centrality across the Agent Reputation Graph), and Fraud Detection.
+
+---
+
+## ✨ Key Features
+
+- ✅ **Fully Automated:** Smart agents handle the quoting, locking, and releasing of escrow funds automatically.
+- ✅ **Zero Counterparty Risk:** Smart contracts ensure your crypto is only released upon cryptographically verified proof of fiat transfer.
+- ✅ **zkTLS Verification:** Bank transfers are verified securely and privately in real-time.
+- ✅ **Premium Fintech UI:** A sleek, user-friendly interface designed for mass adoption.
 
 <div align="center">
   <img src="public/ss1beanstick.png" alt="Beanstick Landing Page" width="800" />
@@ -29,33 +96,46 @@ Here is a look at the premium, fintech-grade interface built for Beanstick:
 
 ---
 
-## 🌟 About Beanstick
+## 📽️ Demo & Deliverables
 
-Today, moving money between traditional banking and crypto is broken. It requires centralized custodians, invasive KYC, high fees, and days of waiting. 
-
-Beanstick solves this by acting as a decentralized network of autonomous Liquidity Provider (LP) agents. When you want to buy crypto, you trade with a decentralized network of agents competing to give you the best rate. 
-
-### Key Features
-- **Fully Automated:** Smart agents handle the quoting, locking, and releasing of escrow funds automatically.
-- **Zero Counterparty Risk:** Smart contracts ensure your crypto is only released upon cryptographically verified proof of fiat transfer.
-- **zkTLS Verification:** Bank transfers are verified securely and privately in real-time.
-- **Premium Fintech UI:** A sleek, user-friendly interface designed for mass adoption.
+- **Demo Video Link (Mandatory):** [To be added later]
+- **Deployment Link (Recommended):** [https://beanstick.vercel.app/](https://beanstick.vercel.app/)
+- **Pitch Deck / PPT (Optional):** [To be added later]
 
 ---
 
-## 🚀 Powered by Neo4j AuraDB
+## ✅ Tasks & Bonus Checklist
 
-A critical component of Beanstick's architecture is its ability to map, analyze, and route complex liquidity graphs in real-time. 
+- [x] All team members completed the mandatory social task  
+- [ ] Bonus Task 1 – Badge sharing  
+- [ ] Bonus Task 2 – Blog/article  
 
-To achieve this, Beanstick utilizes **Neo4j AuraDB** as its core graph database engine.
+---
 
-### How we use Neo4j AuraDB:
-1. **Agent Reputation Graph:** We model every LP agent, user, and historical transaction as nodes and relationships. AuraDB allows us to instantly calculate trust scores and reputation metrics by traversing the transaction history graph.
-2. **Liquidity Routing:** When a user requests a fiat-to-crypto quote, AuraDB executes lightning-fast graph algorithms to find the most optimal, low-fee liquidity paths across thousands of active agents.
-3. **Fraud Detection:** By analyzing patterns in the network (e.g., linked wallets, rapid failed transactions), our graph queries detect and flag suspicious agent rings in real-time, protecting the ecosystem from malicious actors.
+## 🧪 How to Run the Project
 
-Neo4j AuraDB's fully managed cloud infrastructure ensures that Beanstick's agent swarm can query these complex relationships with sub-millisecond latency, providing a seamless user experience.
+### Requirements:
+- Node.js (v18+)
+- pnpm
+- A valid Neo4j AuraDB URI and credentials
 
+### Local Setup:
+```bash
+# 1. Clone the repository
+git clone https://github.com/ayushkumar2601/beanstick.git
+cd beanstick
+
+# 2. Install dependencies
+pnpm install
+
+# 3. Setup environment variables
+# Create a .env file and add your configuration (including your Neo4j credentials).
+
+# 4. Run the development server
+pnpm --filter web run dev
+
+# 5. Open http://localhost:3000 to view the application
+```
 ---
 
 ## ⚙️ Deep-Dive Technical Documentation
@@ -133,42 +213,24 @@ Storing complex agent attestations, cryptographic proofs, and settlement states 
 
 ---
 
-## 🛠 Tech Stack
+## 🧬 Future Scope
 
-- **Frontend:** React, Next.js, Tailwind CSS, Framer Motion
-- **Blockchain / Smart Contracts:** Solidity, 0G Network, Sepolia Testnet
-- **Database / Analytics:** Neo4j AuraDB
-- **Agents:** Custom AI swarm architecture
-
----
-
-## 💻 Getting Started
-
-### Prerequisites
-- Node.js (v18+)
-- pnpm
-- A valid Neo4j AuraDB URI and credentials
-
-### Installation
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/ayushkumar2601/beanstick.git
-   cd beanstick
-   ```
-2. Install dependencies:
-   ```bash
-   pnpm install
-   ```
-3. Setup environment variables:
-   Create a `.env` file and add your configuration (including your Neo4j credentials).
-4. Run the development server:
-   ```bash
-   pnpm --filter web run dev
-   ```
-5. Open `http://localhost:3000` to view the application.
+- 📈 More integrations with global fiat gateways
+- 🛡️ Security enhancements and cross-chain multi-agent protocols
+- 🌐 Localization and mobile application releases for broader accessibility
 
 ---
 
-<div align="center">
-  <p>Built with ❤️ by Ayush Kumar for HackHazards</p>
-</div>
+## 📎 Resources / Credits
+
+- **0G Network** for Data Availability  
+- **Neo4j AuraDB** for Graph Routing  
+- **React, Next.js, and Framer Motion** for the UI  
+
+---
+
+## 🏁 Final Words
+
+Built with ❤️ by Ayush Kumar for the HackHazards Hackathon. The journey of building Beanstick has been an amazing exploration of zkTLS, Neo4j graphs, and trustless agent protocols!
+
+---
