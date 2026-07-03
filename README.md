@@ -58,43 +58,78 @@ Neo4j AuraDB's fully managed cloud infrastructure ensures that Beanstick's agent
 
 ---
 
-## ⚙️ Technical Documentation & Workflow
+## ⚙️ Deep-Dive Technical Documentation
 
-Beanstick operates on a cutting-edge **Agentic Swarm Protocol** and leverages **zkTLS Verification** to achieve completely trustless, non-custodial fiat-to-crypto settlements. By anchoring state to **0G Data Availability (DA)** and executing via **ZK-SNARKs**, we eliminate counterparty risk.
+Beanstick operates on a highly complex, multi-layered architecture designed to solve the "trust" problem inherent in Web2-to-Web3 bridges. By combining a **Decentralized Agentic Swarm Protocol**, **zkTLS (Zero-Knowledge Transport Layer Security) Verification**, and **0G Data Availability (DA)**, we achieve a strictly non-custodial, trustless execution environment that completely eliminates counterparty risk.
 
-### Architectural Workflow
+### 1. The Agentic Swarm Protocol Layer
 
-The following diagram illustrates the lifecycle of a Decentralized Settlement Network (DSN) transaction:
+Traditional P2P exchanges rely on centralized order books or static liquidity pools (AMMs). Beanstick introduces an autonomous **Agentic Swarm Protocol**.
+
+- **Swarm Dynamics:** The network consists of thousands of independent Liquidity Provider (LP) AI agents. These agents run lightweight Node.js instances connected to their own Web2 banking APIs (e.g., Plaid, Stripe) and Web3 hot wallets.
+- **Dynamic Quoting:** When a user requests a settlement (e.g., USD to ETH), the swarm executes an English-style reverse auction in milliseconds. Agents analyze the user's intent, their own liquidity reserves, and network gas fees to generate real-time, highly competitive quotes.
+- **Neo4j Graph Routing Heuristics:** To prevent spam and ensure the user receives the best quote from a *reliable* agent, Beanstick utilizes **Neo4j AuraDB**. We run the `PageRank` and `Betweenness Centrality` algorithms across the Agent Reputation Graph. Only agents with high trust scores and successful historical settlement paths are allowed to win the auction.
+
+### 2. Architectural Workflow Diagram
+
+The following sequence illustrates the complex lifecycle of a Decentralized Settlement Network (DSN) transaction:
 
 ```mermaid
 sequenceDiagram
     participant U as User (Buyer)
-    participant S as Swarm (Neo4j AuraDB)
-    participant LP as Liquidity Provider Agent
-    participant SC as Escrow Smart Contract
+    participant S as Swarm (Neo4j AuraDB Routing)
+    participant LP as Winning LP Agent
+    participant SC as Escrow Smart Contract (Solidity)
     participant 0G as 0G Data Availability
-    participant B as Fiat Bank (Web2)
+    participant B as Fiat Bank (Web2 TLS)
     participant A as Attestor Agent (zkTLS)
 
-    U->>S: Request Fiat-to-Crypto Quote (e.g. USD -> ETH)
-    S->>LP: Graph Traversal for Optimal Routing
-    LP-->>U: Propose Rate & Escrow Terms
-    U->>SC: Lock Crypto (Initiate Non-Custodial Escrow)
-    SC-->>0G: Publish Escrow State Hash
+    Note over U, A: Phase 1: Discovery & Routing
+    U->>S: Broadcast Intent (e.g. $100 USD -> ETH)
+    S->>S: Execute Graph Traversal (Reputation & Liquidity)
+    S->>LP: Route Request to Optimal Agent
+    LP-->>U: Propose Rate, Spread, & Escrow Terms
+
+    Note over U, A: Phase 2: Cryptographic Commitment
+    U->>SC: Lock Crypto Collateral (Initiate Non-Custodial Escrow)
+    SC-->>0G: Publish Immutable Escrow State Hash
+    
+    Note over U, A: Phase 3: Web2 Fiat Execution
     U->>B: Execute Fiat Transfer (Venmo, SEPA, UPI)
-    B-->>U: Generate Bank Receipt
-    A->>B: Intercept TLS Session (zkTLS Generation)
-    A->>SC: Submit ZK-SNARK Proof of Payment
-    SC->>SC: Cryptographically Verify Proof
+    B-->>U: Generate Bank Receipt (TLS Encrypted)
+
+    Note over U, A: Phase 4: Zero-Knowledge Verification
+    A->>B: Intercept TLS Session via Multi-Party Computation
+    A->>A: Generate ZK-SNARK Proof of Fiat Transfer
+    A->>SC: Submit ZK-SNARK Proof to On-Chain Verifier
+    SC->>SC: Cryptographically Validate Proof Circuit
+    
+    Note over U, A: Phase 5: Trustless Settlement
     SC->>U: Auto-Release Crypto (Trustless Execution)
-    SC-->>0G: Finalize Settlement State
+    SC-->>0G: Finalize Settlement State & Update Merkle Root
 ```
 
-### Core Mechanisms Explained
-- **Non-Custodial Escrow**: Crypto assets are locked in immutable smart contracts. They are only released when a deterministic cryptographic proof is validated on-chain.
-- **Agentic Swarm**: Instead of a central order book, a decentralized network of autonomous AI agents compete for order flow.
-- **Neo4j AuraDB Routing**: We utilize high-speed graph traversal to map agent reputation nodes and compute the lowest-latency, lowest-fee settlement route across the swarm.
-- **zkTLS (Zero-Knowledge Transport Layer Security)**: Allows Attestor agents to securely verify data from Web2 banking endpoints without exposing sensitive PII, generating a SNARK proof of the fiat transfer.
+### 3. Non-Custodial Smart Contract Escrow (Layer 1 / Layer 2)
+
+The escrow logic is enforced via highly optimized Solidity smart contracts.
+
+- **Deterministic Locking Mechanism:** When an agreement is reached, the LP agent locks the agreed-upon cryptocurrency into the Escrow Contract. The contract locks the funds with a strict `block.timestamp` deadline.
+- **State Transition Machine:** The contract operates as a strict finite-state machine (FSM) traversing: `INITIATED` -> `LOCKED` -> `AWAITING_PROOF` -> `RELEASED` or `REFUNDED`.
+- **Zero-Trust Release:** No admin, multisig, or central authority can move the funds. The `release()` function requires a valid ZK-SNARK cryptographic proof as its sole parameter. If the proof is valid, the funds route to the user. If the deadline expires without a valid proof, the `refund()` function safely returns the capital to the LP.
+
+### 4. zkTLS: Bridging Web2 and Web3
+
+The most critical innovation in Beanstick is bridging the Web2 banking system with Web3 smart contracts without relying on centralized oracles like Chainlink.
+
+- **Multi-Party Computation (MPC):** Attestor agents act as a proxy between the user and the bank's HTTPS server. They split the TLS session keys using MPC. This allows the Attestor to verify the exact HTML/JSON response from the bank (proving the fiat transfer occurred) *without* ever seeing the user's login credentials or sensitive PII.
+- **ZK-SNARK Generation:** The Attestor generates a concise Zero-Knowledge Proof (ZK-SNARK) asserting: "A transfer of $100 to the LP's account was successful." This proof is tiny (a few hundred bytes) and takes milliseconds to verify on-chain.
+
+### 5. Infinite Scalability via 0G Data Availability
+
+Storing complex agent attestations, cryptographic proofs, and settlement states directly on Layer 1 (Ethereum) would result in exorbitant gas fees. 
+
+- **Data Sharding:** Beanstick anchors all high-throughput, non-consensus critical data to the **0G Data Availability (DA)** layer. 
+- **Merkle Roots:** We batch thousands of settlement states into a single Merkle Tree and post only the Merkle Root to the Layer 1 smart contract. This provides Layer 1 security guarantees with Layer 2 costs, allowing the agent swarm to process millions of micro-transactions per second.
 
 ---
 
